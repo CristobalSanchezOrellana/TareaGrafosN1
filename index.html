@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/grafos.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1.7.3/glider.min.css">
+
+        <link href="dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+        <title> Grafos: Trabajo 1</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top p-3 aria-label">
+        <div class="container">
+            <a class="navbar-brand" href="index.html" style="color: #2648a8;">Trabajo 1 Grafos y lenguajes formales</a>
+            <button class="navbar-toggler border-white" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+        </div>
+    </nav>
+
+
+    <section id="grafos">
+        
+            <div class="row d-flex">
+                <div class="container mt-4">
+                    <h3 class="text-center">Construcción del grafo</h3>
+                </div>
+            </div>
+            <div class="container">
+                <p class="text-center mt-4">con librería vis.js</p>
+                <div class="row pt-3 justify-content-center">
+                    <div class="col-md-6 mx-5">
+                        <p><strong>1.</strong> Tipo de grafo:</p>
+                        <select class="form-control " id="tipoGrafo">
+                            <option value="Simple">Grafo Simple</option>
+                            <option value="Dirigido">Grafo Dirigido</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row d-flex justify-content-center my-2">
+                            <a onclick="draw()" id="btnComenzar" class="btn btn-outline-light px-2" style="text-align: center; max-width: 850px;">Ingresa un Grafo</a>
+                            <select id="locale" style="display: none;">
+                                <option value="es">es</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mx-5" id="">
+                        <p><strong>2.</strong>Ingrese su grafo:</p>
+                        <div class="col-12 my-2 shadow" id="resultado"></div>
+                        <div id="node-popUp">
+                            <span id="node-operation">Vértices</span>
+                            <table style="margin:auto;">
+                                <caption></caption>
+                                <tr>
+                                    <th id="th-id"></th>
+                                    <td><input id="node-id" class="form-control mt-1" placeholder="Ingresa un Identificador" /></td>
+                                </tr>
+                                <tr style="display: none;">
+                                    <th id="th-nombre ">Nombre</th>
+                                    <td><input id="node-label" class="form-control" placeholder="Nombre" /></td>
+                                </tr>
+                            </table>
+                            <input type="button" class="btn btn-outline-light" value="Guardar" id="node-saveButton" />
+                            <input type="button" class="btn btn-outline-light" value="Cancelar" id="node-cancelButton" />
+                        </div>
+
+                        <div id="edge-popUp">
+                            <span id="edge-operation">Aristas</span>
+                            <br>
+                            <table style="margin:center;">
+                                <caption></caption>
+                                <tr>
+                                    <td><input type="number" id="edge-label" class="form-control" min="0 " placeholder="Ingresa el peso del grafo " /></td>
+                                </tr>
+                            </table>
+
+                            <input type="button" class="btn btn-outline-light" value="Guardar" id="edge-saveButton" />
+                            <input type="button" class="btn btn-outline-light" value="Cancelar" id="edge-cancelButton" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <h3 class="text-center">Resultados</h3>
+                        <div class="row justify-content-center">
+                            <div class="col-4 border border-danger mt-4">
+                                <div class="col-12 my-2">
+                                    <h3 class="text-center">Matriz de Caminos</h3>
+                                    <a onclick="imprimirCamino()" id="camino" class="btn btn-outline-light mt-4 marginbtn">Mostrar</a>
+                                    <div class="row justify-content-center">
+                                        <div id="matrizCam" class="pt-4 pb-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-4 border border-danger mt-4">
+                                <div class="col-12 my-2">
+                                    <h3 class="text-center">¿Es conexo?</h3>
+                                    <a onclick="imprimirConexo()" class="btn btn-outline-light mt-4 marginbtn mb-3">Mostrar</a>
+                                    <div class="row justify-content-center">
+                                        <div id="saberConexo" class="pt-4 pb-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pb-5 justify-content-center">
+                            <div class="col-6 border border-darks mt-4 my-2">
+                                <h3 class="text-center mt-2">Camino más Corto</h3>
+                                <div class="text-center marginflotante pt-3">
+                                    <div class="col-5 pl-0 form-group mx-2 mt-3">
+                                        <input type="text" id="entrada_camino" class="form-control mx-2 text-center" placeholder="Desde...">
+                                    </div>
+                                    <div class="col-5 pl-0 mx-2 mb-3">
+                                        <input type="text" id="salida_camino" class="form-control mx-2 text-center" placeholder="Hasta">
+                                    </div>
+                                </div>
+                                <a onclick="Corto()" class="btn btn-outline-light mt-4 marginbtn1">Mostrar</a>
+                                <div class="row justify-content-center">
+                                    <div id="caminoCorto" class="pt-4 pb-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pb-5 justify-content-center">
+                            <div class="col-6 border border-darks mt-4 my-2">
+                                <h3 class="text-center mt-2">¿Es euleriano?</h3>
+                                <a onclick="imprimirEuleriano()" class="btn btn-outline-light mt-4 marginbtn1 mb-3">Mostrar</a>
+                                <div class="row justify-content-center">
+                                    <div id="esEule" class="pt-4 pb-2"></div>
+                                    <div id="esEuleriano"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 border border-darks mt-4 my-2">
+                                <h3 class="text-center mt-2">¿Es hamiltoniano?</h3>
+                                <a onclick="imprimirHamil()" class="btn btn-outline-light mt-4 marginbtn2 mb-3">Mostrar</a>
+                                <div class="row justify-content-center">
+                                    <div id="esHamilto" class="pt-4 pb-2"></div>
+                                    <div id="esHamilton"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pb-5 justify-content-center">
+                            <div class="col-6 border border-darks mt-4 my-2">
+                                <h3 class="text-center mt-2">Flujo Máximo</h3>
+                                <div class="text-center marginflotante">
+                                    <div class="col-5 pl-0 form-group mx-2 mt-3">
+                                        <em class="justify-content-center">Entrada </em>
+                                        <input type="text" id="entrada_flujo" class="form-control mx-2 text-center" placeholder="Desde vertice">
+                                    </div>
+                                    <div class="col-5 pl-0 mx-2 mb-3">
+                                        <em>Salida </em>
+                                        <input type="text" id="salida_flujo" class="form-control mx-2 text-center" placeholder="hasta vertice">
+                                    </div>
+                                </div>
+                                <div id="popAlert"></div>
+                                <a onclick="ImprimirFlujoMaximo()" id="inicioFlujo" class="btn btn-outline-light mt-1 marginbtn1 mb-3">Mostrar</a>
+                                <div class="row justify-content-center">
+                                    <div id="dibujoMatriz"></div>
+                                    <div id="flujoMax" class="pt-4 pb-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pb-5 justify-content-center">
+                            <div class="col-6 border border-darks mt-4 my-2">
+                            
+                                <h3 class="text-center mt-2">Árbol Generador Prim</h3>
+                                <div id="popAlertprim"></div>
+                                <a onclick="imprimirPrim()" id="inicioFlujo" class="btn btn-outline-light mt-1 marginbtn1 mb-3">Mostrar</a>
+                                <div id="algoritmoPrim"></div>
+                                <div id="aPrim"></div>
+                                <div class="resultadosPrim"></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <p class="text-align:right">Trabajo por Javier Cisternas Cristi y Cristobal Sanchez Orellana.</p>
+
+        
+
+        </div>
+
+    </section>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+        <script src="https://kit.fontawesome.com/c8152ea011.js" crossorigin="anonymous"></script>
+    
+        <script type="text/javascript" src="appgrafo.js"></script>
+        <script type="text/javascript" src="dist/vis.js"></script>
+
+    </body>
+</html>
